@@ -100,7 +100,7 @@ class Users extends CI_Controller {
      *
      * @return Response
     */
-    public function index_update($id)
+    public function index_update()
     {
 
        $security_key = $this->input->post('security_key');
@@ -124,7 +124,7 @@ class Users extends CI_Controller {
             $response =  json_encode(array('error'=>validation_errors()));
             echo $response;exit;
          }
-
+	$id = $this->input->post('id');
           $input = array(
                          'first_name' => $this->input->post('first_name'),
                          'last_name' => $this->input->post('last_name'),
@@ -150,7 +150,7 @@ class Users extends CI_Controller {
      *
      * @return Response
     */
-    public function index_delete($id)
+    public function index_delete()
     {
         /*$security_key = $this->input->post('security_key');
         if($security_key != $this->secury_key){
@@ -159,6 +159,18 @@ class Users extends CI_Controller {
         if(empty($security_key) || $security_key != $this->secury_key){
             $this->response(['Security is must..'], REST_Controller::HTTP_OK);
         }*/
+	    $security_key = $this->input->post('security_key');
+        if($security_key != $this->secury_key){
+            //$this->response(['Security key is not valid..'], REST_Controller::HTTP_OK);
+            $response =  json_encode(array('error'=>'Security key is not valid..'));
+            echo $response;exit;
+        }
+        if($security_key == ''){
+           // $this->response(['Security is must..'], REST_Controller::HTTP_OK);
+            $response =  json_encode(array('error'=>'Security is must..'));
+            echo $response;exit;
+        }
+	    $id = $this->input->post('id');
         $this->db->delete('users', array('id'=>$id));
        
         //$this->response(['result'=>'user deleted successfully.'], REST_Controller::HTTP_OK);
